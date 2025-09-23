@@ -1,9 +1,7 @@
 #include <iostream>
-#include <memory>
 
-#include "engine.hpp"
 #include "cluster.hpp"
-#include "render.hpp"
+#include "display.hpp"
 
 int main(void){
 
@@ -15,8 +13,8 @@ int main(void){
     cluster->ignite();
     delete cluster;
 
-    render();
-    createWindow();
-
+    Display* display = new Display();
+    display->add_circle();	
+    display->render();
     return 0;
 }
