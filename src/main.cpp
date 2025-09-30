@@ -4,17 +4,20 @@
 #include "display.hpp"
 
 int main(void){
+    Display* display = new Display();
 
-    uint n_engines;    
+    int n_engines;
     std::cout << "Enter the number of engines for the cluster: ";
     std::cin >> n_engines;
 
     Cluster* cluster = new Cluster(n_engines);
     cluster->ignite();
-    delete cluster;
 
-    Display* display = new Display();
-    display->add_circle();	
+    display->add_cluster(cluster);
     display->render();
+
+    delete cluster;
+    delete display;
+
     return 0;
 }

@@ -4,6 +4,7 @@
 
 #include "display.hpp"
 #include "circle.hpp"
+#include "cluster.hpp"
 
 Display::Display() {
     if (!glfwInit()) {
@@ -63,6 +64,12 @@ void Display::render() {
     }
 }
 
-void Display::add_circle() {
-    this->circles.push_back(new Circle(0.0f, 0.0f, 0.5f));
+void Display::add_circle(Circle* circle){
+    this->circles.push_back(circle);
+}
+
+void Display::add_cluster(Cluster* cluster){
+    for (Circle* circle: cluster->circles) {
+	this->add_circle(circle);
+    }
 }

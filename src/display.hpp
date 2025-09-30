@@ -6,6 +6,7 @@
 #include <list>
 
 #include "circle.hpp"
+#include "cluster.hpp"
 
 class Display {
 
@@ -13,7 +14,8 @@ public:
     Display();
     ~Display();
     void render();
-    void add_circle();
+    void add_circle(Circle* circle);
+    void add_cluster(Cluster* cluster);
 
 private:
     GLFWwindow* window;
