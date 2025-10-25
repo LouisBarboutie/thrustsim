@@ -1,7 +1,9 @@
-out/sim: out/main.o out/engine.o out/cluster.o out/glad.o out/display.o out/circle.o out/mesh.o
-	g++ out/main.o out/engine.o out/cluster.o out/glad.o out/display.o out/circle.o out/mesh.o -o out/sim -lglfw 
+CXXFLAGS = -Wall -Iinc -lGL -lglfw
 
-out/main.o: src/main.cpp src/display.cpp 
+out/sim: out/main.o out/engine.o out/cluster.o out/glad.o out/display.o out/circle.o out/mesh.o out/shader.o
+	g++ out/main.o out/engine.o out/cluster.o out/glad.o out/display.o out/circle.o out/mesh.o out/shader.o -o out/sim -lglfw 
+
+out/main.o: src/main.cpp src/display.cpp
 	g++ -c src/main.cpp -o out/main.o -Iinc -lglfw -lGL
 
 out/engine.o: src/engine.cpp
@@ -21,6 +23,9 @@ out/mesh.o: src/mesh.cpp
 
 out/glad.o: src/glad.c 
 	gcc -c src/glad.c -o out/glad.o -Iinc
+
+out/shader.o: src/shader.o
+	g++ -c src/shader.cpp -o out/shader.o -Iinc -lglfw -lGL
 
 clean:
 	rm -r out/*

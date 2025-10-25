@@ -8,8 +8,10 @@
 #include "display.hpp"
 #include "circle.hpp"
 #include "cluster.hpp"
+#include "shader.hpp"
 
-Display::Display() {
+Display::Display() 
+{
     if (!glfwInit()) {
 	std::cout << "GLFW failed to initialize!" << std::endl;
 	return;
@@ -17,8 +19,13 @@ Display::Display() {
     std::cout << "GLFW initialized!" << std::endl;
 
     this->initialize_window();
-    }
-Display::~Display() {};
+    this->shader = new Shader("src/shader.vert", "src/shader.frag");
+}
+
+Display::~Display() 
+{
+    delete this->shader;
+};
 
 void Display::initialize_window() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -51,29 +58,31 @@ void Display::framebuffer_size_callback(GLFWwindow* window, int width, int heigh
     glViewport(0, 0, width, height);
 }
 
+bool Display::should_close()
+{
+    return glfwWindowShouldClose(this->window);
+}
+
 void Display::render() { 
-    while (!glfwWindowShouldClose(this->window)) {
-	glfwPollEvents();
-	
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	for (Circle* circle : this->circles) {
-	    glUseProgram(circle->mesh->shader_program);
-	    this->transform = glm::mat4(1.0f);
-	    this->transform = glm::translate(this->transform, glm::vec3(1.0f, 1.0f, 0.0f));
-	    this->transform = glm::rotate(this->transform, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	    this->transform = glm::scale(this->transform, glm::vec3(0.5f, 0.5f, 0.5f));
+    glfwPollEvents();
+    
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    for (const Circle* circle : this->circles) {
+	this->shader->use();
+	this->transform = glm::mat4(1.0f);
+	this->transform = glm::translate(this->transform, glm::vec3(1.0f, 1.0f, 0.0f));
+	this->transform = glm::rotate(this->transform, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	this->transform = glm::scale(this->transform, glm::vec3(0.5f, 0.5f, 0.5f));
 
-	    unsigned int shader_id = circle->mesh->shader_program;
-	    unsigned int transform_location = glGetUniformLocation(shader_id, "transform");
-	    glUniformMatrix4fv(transform_location, 1, GL_FALSE, glm::value_ptr(this->transform));
+	unsigned int transform_location = glGetUniformLocation(this->shader->id(), "transform");
+	glUniformMatrix4fv(transform_location, 1, GL_FALSE, glm::value_ptr(this->transform));
 
-	    circle->mesh->draw();
-	}
-	
-	glfwSwapBuffers(window);
+	circle->mesh->draw();
     }
+    
+    glfwSwapBuffers(window);
 }
 
 void Display::add_circle(Circle* circle){

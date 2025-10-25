@@ -8,6 +8,7 @@
 
 #include "circle.hpp"
 #include "cluster.hpp"
+#include "shader.hpp"
 
 class Display {
 
@@ -17,10 +18,12 @@ public:
     void render();
     void add_circle(Circle* circle);
     void add_cluster(Cluster* cluster);
+    bool should_close();
 
 private:
     GLFWwindow* window;
 
+    Shader* shader;
     void initialize_window();
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     std::list<Circle*> circles;

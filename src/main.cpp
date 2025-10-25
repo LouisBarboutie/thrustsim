@@ -1,8 +1,6 @@
 #include <cctype>
 #include <iostream>
-#include <string>
 #include <cctype>
-#include <array>
 
 #include "cluster.hpp"
 #include "display.hpp"
@@ -35,7 +33,9 @@ int main(void){
     cluster->ignite();
 
     display->add_cluster(cluster);
-    display->render();
+    while (!display->should_close()) {
+	display->render();
+    }
 
     delete cluster;
     delete display;
