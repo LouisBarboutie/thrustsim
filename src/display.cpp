@@ -1,6 +1,9 @@
 #include <iostream>
-#include <glad/glad.h>
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "display.hpp"
 #include "circle.hpp"
@@ -14,8 +17,7 @@ Display::Display() {
     std::cout << "GLFW initialized!" << std::endl;
 
     this->initialize_window();
-
-}
+    }
 Display::~Display() {};
 
 void Display::initialize_window() {
@@ -57,7 +59,17 @@ void Display::render() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	for (Circle* circle : this->circles) {
-	    circle->draw();
+	    glUseProgram(circle->mesh->shader_program);
+	    this->transform = glm::mat4(1.0f);
+	    this->transform = glm::translate(this->transform, glm::vec3(1.0f, 1.0f, 0.0f));
+	    this->transform = glm::rotate(this->transform, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	    this->transform = glm::scale(this->transform, glm::vec3(0.5f, 0.5f, 0.5f));
+
+	    unsigned int shader_id = circle->mesh->shader_program;
+	    unsigned int transform_location = glGetUniformLocation(shader_id, "transform");
+	    glUniformMatrix4fv(transform_location, 1, GL_FALSE, glm::value_ptr(this->transform));
+
+	    circle->mesh->draw();
 	}
 	
 	glfwSwapBuffers(window);

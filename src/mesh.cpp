@@ -28,7 +28,6 @@ Mesh::Mesh(std::vector<float> vertices) {
 Mesh::~Mesh() {}
 
 void Mesh::draw() {
-    glUseProgram(this->shader_program);
     glBindVertexArray(this->VAO);
     glDrawArrays(GL_LINE_LOOP, 0, this->vertices.size() / 3);
 }

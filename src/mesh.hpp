@@ -14,10 +14,10 @@ public:
     Mesh(std::vector<float> vertices);
     ~Mesh();
     void draw();
+    unsigned int VBO, VAO, vertex_shader, fragment_shader, shader_program;
+    std::vector<float> vertices;
 
 private:
-    std::vector<float> vertices;
-    unsigned int VBO, VAO, vertex_shader, fragment_shader, shader_program;
 
     static unsigned int load_shader(std::string path, GLenum shader_type);
     static unsigned int create_program(uint vertex_shader, uint fragment_shader);

@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include <list>
 
 #include "circle.hpp"
@@ -23,6 +24,7 @@ private:
     void initialize_window();
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     std::list<Circle*> circles;
+    glm::mat4 transform; 
 };
 
 #endif
